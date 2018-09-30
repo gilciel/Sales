@@ -16,7 +16,6 @@ namespace Sales.API.Controllers
 {
     public class ProductsController : ApiController
     {
-/*
         private DataContext db = new DataContext();
 
         // GET: api/Products
@@ -29,7 +28,7 @@ namespace Sales.API.Controllers
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> GetProduct(int id)
         {
-            Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FindAsync (id);
             if (product == null)
             {
                 return NotFound();
@@ -47,7 +46,7 @@ namespace Sales.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != product.ProductId)
+            if (id != product.ProductID)
             {
                 return BadRequest();
             }
@@ -85,7 +84,7 @@ namespace Sales.API.Controllers
             db.Products.Add(product);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.ProductId }, product);
+            return CreatedAtRoute("DefaultApi", new { id = product.ProductID }, product);
         }
 
         // DELETE: api/Products/5
@@ -115,8 +114,7 @@ namespace Sales.API.Controllers
 
         private bool ProductExists(int id)
         {
-            return db.Products.Count(e => e.ProductId == id) > 0;
+            return db.Products.Count(e => e.ProductID == id) > 0;
         }
-*/
     }
 }

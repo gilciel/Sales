@@ -1,8 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Sales.Common.Models;
@@ -10,22 +13,21 @@ using Sales.Domain.Models;
 
 namespace Sales.API.Controllers
 {
-    public class ProductsController : ApiController
+    public class Products1Controller : ApiController
     {
         private DataContext db = new DataContext();
 
-        // GET: api/Products
+        // GET: api/Products1
         public IQueryable<Product> GetProducts()
         {
             return db.Products;
         }
 
-        // GET: api/Products/5
+        // GET: api/Products1/5
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        public IHttpActionResult GetProduct(int id)
         {
-            Product product = await db.Products.Include(e => e.ProductID == id).FirstOrDefaultAsync();
-            //Product product = await db.Products.FindAsync(id);
+            Product product = db.Products.Find(id);
             if (product == null)
             {
                 return NotFound();
@@ -34,9 +36,9 @@ namespace Sales.API.Controllers
             return Ok(product);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Products1/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public IHttpActionResult PutProduct(int id, Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +54,7 @@ namespace Sales.API.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -69,35 +71,33 @@ namespace Sales.API.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Products
+        // POST: api/Products1
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        public IHttpActionResult PostProduct(Product product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            //db.Products.Add(product);
-            
-            await db.SaveChangesAsync();
+            db.Products.Add(product);
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = product.ProductID }, product);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/Products1/5
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
+        public IHttpActionResult DeleteProduct(int id)
         {
-            //Product product = await db.Products.FindAsync(id);
-            Product product = await db.Products.Include(e => e.ProductID == id).FirstOrDefaultAsync();
+            Product product = db.Products.Find(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            //db.Products.Remove(product);
-            await db.SaveChangesAsync();
+            db.Products.Remove(product);
+            db.SaveChanges();
 
             return Ok(product);
         }

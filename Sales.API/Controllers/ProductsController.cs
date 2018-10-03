@@ -1,7 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -24,8 +28,7 @@ namespace Sales.API.Controllers
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> GetProduct(int id)
         {
-            Product product = await db.Products.Include(e => e.ProductID == id).FirstOrDefaultAsync();
-            //Product product = await db.Products.FindAsync(id);
+            Product product = await db.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -43,7 +46,7 @@ namespace Sales.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != product.ProductID)
+            if (id != product.ProductId)
             {
                 return BadRequest();
             }
@@ -78,25 +81,23 @@ namespace Sales.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            //db.Products.Add(product);
-            
+            db.Products.Add(product);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.ProductID }, product);
+            return CreatedAtRoute("DefaultApi", new { id = product.ProductId }, product);
         }
 
         // DELETE: api/Products/5
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> DeleteProduct(int id)
         {
-            //Product product = await db.Products.FindAsync(id);
-            Product product = await db.Products.Include(e => e.ProductID == id).FirstOrDefaultAsync();
+            Product product = await db.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            //db.Products.Remove(product);
+            db.Products.Remove(product);
             await db.SaveChangesAsync();
 
             return Ok(product);
@@ -113,7 +114,7 @@ namespace Sales.API.Controllers
 
         private bool ProductExists(int id)
         {
-            return db.Products.Count(e => e.ProductID == id) > 0;
+            return db.Products.Count(e => e.ProductId == id) > 0;
         }
     }
 }

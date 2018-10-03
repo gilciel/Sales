@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="1eaa2ee6-d7e3-4a86-b2bc-5af1dcac23f7"
-    Publisher="CN=f2d4cd3b-8a3b-4e41-94a0-2c270586189c"
+    Name="096d6eea-0a29-462d-8f96-b815f45d6266"
+    Publisher="CN=e4b21ab2-947f-4b5b-964c-de3221d298c3"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Sales.UWP</DisplayName>
-    <PublisherDisplayName>f2d4cd3b-8a3b-4e41-94a0-2c270586189c</PublisherDisplayName>
+    <PublisherDisplayName>e4b21ab2-947f-4b5b-964c-de3221d298c3</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

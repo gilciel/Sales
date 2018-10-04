@@ -25,5 +25,10 @@ namespace Sales.Common.Models
         [Display(Name = "Publish On")]
         [DataType(DataType.Date)]
         public DateTime PublishOn { get; set; }
+
+        public override string ToString()
+        {
+            return this.Description;
+        }
     }
 }

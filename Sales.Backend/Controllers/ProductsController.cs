@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Sales.Backend.Models;
-using Sales.Common.Models;
-
-namespace Sales.Backend.Controllers
+﻿namespace Sales.Backend.Controllers
 {
+    using System.Data.Entity;
+    using System.Threading.Tasks;
+    using System.Net;
+    using System.Web.Mvc;
+    using Models;
+    using Common.Models;
+    using System.Linq;
+    using Sales.Backend.Helpers;
+    using System;
+
     public class ProductsController : Controller
     {
         private LocalDataContext db = new LocalDataContext();
@@ -19,7 +17,7 @@ namespace Sales.Backend.Controllers
         // GET: Products
         public async Task<ActionResult> Index()
         {
-            return View(await db.Products.ToListAsync());
+            return View(await db.Products.OrderBy(p => p.Description).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -38,6 +36,7 @@ namespace Sales.Backend.Controllers
         }
 
         // GET: Products/Create
+
         public ActionResult Create()
         {
             return View();
@@ -48,16 +47,41 @@ namespace Sales.Backend.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ProductId,Description,Price,IsAvailable,PublishOn")] Product product)
+        public async Task<ActionResult> Create(ProductView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = string.Empty;
+                var folder = "~/Content/Products";
+
+                if (view.ImageFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageFile, folder);
+                    pic = $"{folder}/{ pic}";
+                }
+
+                var product = this.ToProduct(view, pic);
+
                 db.Products.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(product);
+            return View(view);
+        }
+
+        private Product ToProduct(ProductView view,string pic)
+        {
+            return new Product
+            {
+                Description = view.Description,
+                ImagePath   = pic,
+                Price       = view.Price,
+                Remarks     = view.Remarks,
+                IsAvailable = view.IsAvailable,
+                PublishOn   = view.PublishOn,
+                ProductId   = view.ProductId
+            };
         }
 
         // GET: Products/Edit/5
@@ -72,7 +96,23 @@ namespace Sales.Backend.Controllers
             {
                 return HttpNotFound();
             }
-            return View(product);
+            var view = ToView(product);
+            return View(view);
+        }
+
+        private ProductView ToView(Product product)
+        {
+            return new ProductView
+            {
+                Description = product.Description,
+                ImagePath = product.ImagePath,
+                Price = product.Price,
+                Remarks = product.Remarks,
+                IsAvailable = product.IsAvailable,
+                PublishOn = product.PublishOn,
+                ProductId = product.ProductId
+            };
+
         }
 
         // POST: Products/Edit/5
@@ -80,15 +120,25 @@ namespace Sales.Backend.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductId,Description,Price,IsAvailable,PublishOn")] Product product)
+        public async Task<ActionResult> Edit(ProductView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = view.ImagePath;
+                var folder = "~/Content/Products";
+
+                if (view.ImageFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageFile, folder);
+                    pic = $"{folder}/{ pic}";
+                }
+
+                var product = this.ToProduct(view, pic);
                 db.Entry(product).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(product);
+            return View(view);
         }
 
         // GET: Products/Delete/5

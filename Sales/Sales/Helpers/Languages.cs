@@ -55,6 +55,7 @@
         }
         public static string PricePlaceholder
         {
+            get { return Resource.PricePlaceholder; }
         }
         public static string Remarks
         {

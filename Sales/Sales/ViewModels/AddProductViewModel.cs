@@ -2,6 +2,8 @@
 {
     using GalaSoft.MvvmLight.Command;
     using Helpers;
+    using Plugin.Media;
+    using Plugin.Media.Abstractions;
     using Sales.Common.Models;
     using Services;
     using System.Windows.Input;
@@ -11,6 +13,8 @@
     {
         #region Atributes
 
+        private MediaFile file;
+        private ImageSource imageSource;
         private ApiService apiService;
         private bool isRunning;
         private bool isEnable;
@@ -37,6 +41,12 @@
             set { this.SetValue(ref this.isEnable, value); }
         }
 
+        public ImageSource ImageSource
+        {
+            get { return this.imageSource; }
+            set { this.SetValue(ref this.imageSource, value); }
+        }
+
         #endregion
 
         #region Constructors
@@ -44,6 +54,7 @@
         {
             this.apiService = new ApiService();
             this.IsEnable = true;
+            this.ImageSource = "noproduct";
         }
         #endregion
 
@@ -53,6 +64,13 @@
             get
             {
                 return new RelayCommand(Save);
+            }
+        }
+        public ICommand ChangeImageCommand
+        {
+            get
+            {
+                return new RelayCommand(ChangeImage);
             }
         }
 
@@ -85,14 +103,14 @@
                     Languages.Accept);
                 return;
             }
-            this.isRunning = true;
-            this.isEnable = false;
+            this.IsRunning = true;
+            this.IsEnable = false;
 
             var connection = await this.apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
-                this.isRunning = false;
-                this.isEnable = true;
+                this.IsRunning = false;
+                this.IsEnable = true;
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     connection.Message,
@@ -114,19 +132,66 @@
 
             if(!response.IsSuccess)
             {
-                this.isRunning = false;
-                this.isEnable = true;
+                this.IsRunning = false;
+                this.IsEnable = true;
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     response.Message,
                     Languages.Accept);
                 return;
             }
-            this.isRunning = false;
-            this.isEnable = true;
-            await Application.Current.MainPage.Navigation.PopAsync();
 
+            var newProduct = (Product)response.Result;
+            var viewModel = ProductsViewModel.GetInstance();
+            viewModel.Products.Add(newProduct);
+
+            this.IsRunning = false;
+            this.IsEnable = true;
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
+        private async void ChangeImage()
+        {
+            await CrossMedia.Current.Initialize();
+
+            var source = await Application.Current.MainPage.DisplayActionSheet(
+                Languages.ImageSource,
+                Languages.Cancel,
+                null,
+                Languages.FromGallery,
+                Languages.NewPicture);
+
+            if (source == Languages.Cancel)
+            {
+                this.file = null;
+                return;
+            }
+
+            if (source == Languages.NewPicture)
+            {
+                this.file = await CrossMedia.Current.TakePhotoAsync(
+                    new StoreCameraMediaOptions
+                    {
+                        Directory = "Sample",
+                        Name = "test.jpg",
+                        PhotoSize = PhotoSize.Small,
+                    }
+                );
+            }
+            else
+            {
+                this.file = await CrossMedia.Current.PickPhotoAsync();
+            }
+
+            if (this.file != null)
+            {
+                this.ImageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = this.file.GetStream();
+                    return stream;
+                });
+            }
+        }
+
         #endregion
     }
 }

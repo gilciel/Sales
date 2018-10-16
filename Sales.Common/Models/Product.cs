@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sales.Common.Models
+﻿namespace Sales.Common.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class Product
     {
         [Key]
@@ -32,6 +29,9 @@ namespace Sales.Common.Models
         [DataType(DataType.Date)]
         public DateTime PublishOn { get; set; }
 
+        [NotMapped]
+        public byte[] ImageArray { get; set; }
+
         public string ImageFullPath
         {
             get
@@ -40,7 +40,7 @@ namespace Sales.Common.Models
                 {
                     return "noproduct.png";
                 }
-                return $"https://salesbackendgdda.azurewebsites.net/{this.ImagePath.Substring(1)}";
+                return $"https://salesapiggda.azurewebsites.net/{this.ImagePath.Substring(1)}";
             }
         }
 

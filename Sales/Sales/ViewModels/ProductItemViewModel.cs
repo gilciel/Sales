@@ -2,12 +2,12 @@
 {
     using Common.Models;
     using GalaSoft.MvvmLight.Command;
-    using System;
     using System.Windows.Input;
     using Services;
     using Xamarin.Forms;
     using Sales.Helpers;
     using System.Linq;
+    using Sales.Views;
 
     public class ProductItemViewModel : Product
     {
@@ -29,6 +29,20 @@
             {
                 return new RelayCommand(DeleteProduct);
             }
+        }
+
+        public ICommand EditProductCommand
+        {
+            get
+            {
+                return new RelayCommand(EditProduct);
+            }
+        }
+
+        private async void EditProduct()
+        {
+            MainViewModel.GetInstance().EditProduct = new EditProductViewModel(this);
+            await Application.Current.MainPage.Navigation.PushAsync(new EditProductPage());
         }
 
         private async void DeleteProduct()

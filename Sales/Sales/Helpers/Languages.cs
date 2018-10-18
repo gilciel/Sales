@@ -121,6 +121,14 @@
         {
             get { return Resource.Confirm; }
         }
+        public static string EditProdut
+        {
+            get { return Resource.EditProduct; }
+        }
+        public static string IsAvailable
+        {
+            get { return Resource.IsAvailable; }
+        }
 
     }
 }

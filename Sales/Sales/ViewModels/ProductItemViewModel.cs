@@ -79,7 +79,6 @@
             {
                 productsViewModel.Products.Remove(deletedProduct);
             }
-
         }
         //EditProductCommand
         #endregion

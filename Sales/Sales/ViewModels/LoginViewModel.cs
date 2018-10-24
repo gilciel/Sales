@@ -2,6 +2,8 @@
 {
     using GalaSoft.MvvmLight.Command;
     using Sales.Helpers;
+    using Sales.Services;
+    using Sales.Views;
     using System;
     using System.Windows.Input;
     using Xamarin.Forms;
@@ -10,6 +12,7 @@
     {
         #region Attributes
 
+        private ApiService apiService;
         private bool isRunning;
         private bool isEnable;
 
@@ -19,7 +22,7 @@
 
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool IsRemember { get; set; }
+        public bool IsRemembered { get; set; }
         public bool IsRunning
         {
             get { return this.isRunning; }
@@ -38,7 +41,8 @@
         public LoginViewModel()
         {
             this.isEnable = true;
-            this.IsRemember = true;
+            this.IsRemembered = true;
+            this.apiService = new ApiService();
         }
 
         #endregion
@@ -71,6 +75,39 @@
                     Languages.Accept);
                 return;
             }
+
+            this.IsRunning = true;
+            this.IsEnable = false;
+
+            var connection = await this.apiService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                this.IsRunning = false;
+                this.IsEnable = true;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                return;
+            }
+
+            var url = Application.Current.Resources["UrlAPI"].ToString();
+
+            var token = await this.apiService.GetToken(url,this.Email,this.Password);
+            if(token==null || string.IsNullOrEmpty(token.AccessToken))
+            {
+                this.IsRunning = false;
+                this.IsEnable = true;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, Languages.SomethingWrong, Languages.Accept);
+                return;
+            }
+
+            Settings.TokenType = token.TokenType;
+            Settings.AccessToken = token.AccessToken;
+            Settings.IsRemembered = this.IsRemembered;
+
+            MainViewModel.GetInstance().Products = new ProductsViewModel();
+            Application.Current.MainPage = new ProductsPage();
+            this.IsRunning = false;
+            this.IsEnable = true;
+
         }
 
         #endregion

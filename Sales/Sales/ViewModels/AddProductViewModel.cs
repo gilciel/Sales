@@ -168,7 +168,7 @@
 */
             this.IsRunning = false;
             this.IsEnable = true;
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
         private async void ChangeImage()
         {

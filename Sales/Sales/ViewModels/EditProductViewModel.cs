@@ -115,7 +115,7 @@ namespace Sales.ViewModels
             productsViewModel.RefreshList();
             this.IsRunning = true;
             this.IsEnable = false;
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
 
         public ICommand SaveCommand
@@ -203,7 +203,7 @@ namespace Sales.ViewModels
 
             this.IsRunning = false;
             this.IsEnable = true;
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
         private async void ChangeImage()
         {

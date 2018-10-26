@@ -59,6 +59,7 @@
         #endregion
 
         #region Commands
+
         public ICommand SaveCommand
         {
             get
@@ -66,23 +67,15 @@
                 return new RelayCommand(Save);
             }
         }
-        public ICommand ChangeImageCommand
-        {
-            get
-            {
-                return new RelayCommand(ChangeImage);
-            }
-        }
-
         private async void Save()
         {
-            if(string.IsNullOrEmpty(this.Description))
+            if (string.IsNullOrEmpty(this.Description))
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
                     Languages.DescriptionError,
                     Languages.Accept);
-                return; 
+                return;
             }
             if (string.IsNullOrEmpty(this.Price))
             {
@@ -95,7 +88,7 @@
 
             var price = decimal.Parse(this.Price);
 
-            if (price<0)
+            if (price < 0)
             {
                 await Application.Current.MainPage.DisplayAlert(
                     Languages.Error,
@@ -135,9 +128,9 @@
             var url = Application.Current.Resources["UrlAPI"].ToString();
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
-            var response = await this.apiService.Post(url, prefix, controller,product, Settings.TokenType, Settings.AccessToken);
+            var response = await this.apiService.Post(url, prefix, controller, product, Settings.TokenType, Settings.AccessToken);
 
-            if(!response.IsSuccess)
+            if (!response.IsSuccess)
             {
                 this.IsRunning = false;
                 this.IsEnable = true;
@@ -153,22 +146,30 @@
             productsViewModel.MyProducts.Add(newProduct);
             productsViewModel.RefreshList();
 
-/*
-            productsViewModel.Products.Add(new ProductItemViewModel
-            {
-                Description = newProduct.Description,
-                ImageArray = newProduct.ImageArray,
-                ImagePath = newProduct.ImagePath,
-                IsAvailable = newProduct.IsAvailable,
-                Price = newProduct.Price,
-                ProductId = newProduct.ProductId,
-                PublishOn = newProduct.PublishOn,
-                Remarks = newProduct.Remarks,
-            });
-*/
+            /*
+                        productsViewModel.Products.Add(new ProductItemViewModel
+                        {
+                            Description = newProduct.Description,
+                            ImageArray = newProduct.ImageArray,
+                            ImagePath = newProduct.ImagePath,
+                            IsAvailable = newProduct.IsAvailable,
+                            Price = newProduct.Price,
+                            ProductId = newProduct.ProductId,
+                            PublishOn = newProduct.PublishOn,
+                            Remarks = newProduct.Remarks,
+                        });
+            */
             this.IsRunning = false;
             this.IsEnable = true;
             await App.Navigator.PopAsync();
+        }
+
+        public ICommand ChangeImageCommand
+        {
+            get
+            {
+                return new RelayCommand(ChangeImage);
+            }
         }
         private async void ChangeImage()
         {

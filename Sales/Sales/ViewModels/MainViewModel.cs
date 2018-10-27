@@ -39,6 +39,18 @@
             }
         }
 
+        public string UserImageFullPath
+        {
+            get
+            {
+                if (this.UserASP != null && this.UserASP.Claims != null && this.UserASP.Claims.Count > 2)
+                {
+                    return $"https://salesapiggda.azurewebsites.net{this.UserASP.Claims[2].ClaimValue.Substring(1)}";
+                }
+
+                return null;
+            }
+        }
 
         #endregion
 

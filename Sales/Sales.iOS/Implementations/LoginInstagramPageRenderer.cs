@@ -43,8 +43,8 @@ namespace Sales.iOS.Implementations
                 if (eventArgs.IsAuthenticated)
                 {
                     var accessToken = eventArgs.Account.Properties["access_token"].ToString();
-                    var profile = await GetInstagramProfileAsync(accessToken);
-                    //App.NavigateToProfile(profile, "Instagram");
+                    var token = await GetInstagramProfileAsync(accessToken);
+                    App.NavigateToProfile(token);
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace Sales.iOS.Implementations
             PresentViewController(auth.GetUI(), true, null);
         }
 
-        public async Task<InstagramResponse> GetInstagramProfileAsync(string accessToken)
+        public async Task<TokenResponse> GetInstagramProfileAsync(string accessToken)
         {
             var InstagramProfileInfoURL = Xamarin.Forms.Application.Current.Resources["InstagramProfileInfoURL"].ToString();
             var requestUrl = string.Format("{0}={1}",
@@ -63,7 +63,16 @@ namespace Sales.iOS.Implementations
                 accessToken);
 
             var apiService = new ApiService();
-            return await apiService.GetInstagram(requestUrl);
+            var responseInstagram = await apiService.GetInstagram(requestUrl);
+            var url = Xamarin.Forms.Application.Current.Resources["UrlAPI"].ToString();
+            var prefix = Xamarin.Forms.Application.Current.Resources["UrlPrefix"].ToString();
+            var controller = Xamarin.Forms.Application.Current.Resources["UrlUsersController"].ToString();
+            var token = await apiService.LoginInstagram(
+                url,
+                prefix,
+                $"{controller}/LoginInstagram",
+                responseInstagram);
+            return token;
         }
     }
 }

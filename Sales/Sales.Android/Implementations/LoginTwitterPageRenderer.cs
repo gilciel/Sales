@@ -4,12 +4,12 @@
 
 namespace Sales.Droid.Implementations
 {
-    using System;
-    using System.Threading.Tasks;
     using Android.App;
     using Common.Models;
     using Newtonsoft.Json;
     using Sales.Services;
+    using System;
+    using System.Threading.Tasks;
     using Xamarin.Auth;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
@@ -20,12 +20,12 @@ namespace Sales.Droid.Implementations
         {
             base.OnElementChanged(e);
             var activity = this.Context as Activity;
-            var TwitterKey = Xamarin.Forms.Application.Current.Resources["TwitterConsumerKey"].ToString();
-            var TwitterSecret = Xamarin.Forms.Application.Current.Resources["TwitterConsumerSecret"].ToString();
-            var TwitterRequestURL = Xamarin.Forms.Application.Current.Resources["TwitterRequestTokenURL"].ToString();
-            var TwitterAuthURL = Xamarin.Forms.Application.Current.Resources["TwitterAuthorizeURL"].ToString();
-            var TwitterCallbackURL = Xamarin.Forms.Application.Current.Resources["TwitterAccessTokenURL"].ToString();
-            var TwitterURLAccess = Xamarin.Forms.Application.Current.Resources["Url"].ToString();
+            var TwitterKey = Xamarin.Forms.Application.Current.Resources["TwitterKey"].ToString();
+            var TwitterSecret = Xamarin.Forms.Application.Current.Resources["TwitterSecret"].ToString();
+            var TwitterRequestURL = Xamarin.Forms.Application.Current.Resources["TwitterRequestURL"].ToString();
+            var TwitterAuthURL = Xamarin.Forms.Application.Current.Resources["TwitterAuthURL"].ToString();
+            var TwitterCallbackURL = Xamarin.Forms.Application.Current.Resources["TwitterCallbackURL"].ToString();
+            var TwitterURLAccess = Xamarin.Forms.Application.Current.Resources["TwitterURLAccess"].ToString();
 
             var auth = new OAuth1Authenticator(
                 consumerKey: TwitterKey,
@@ -72,5 +72,4 @@ namespace Sales.Droid.Implementations
             return token;
         }
     }
-
 }

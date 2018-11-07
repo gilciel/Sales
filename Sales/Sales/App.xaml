@@ -28,13 +28,26 @@
             <x:String x:Key="InstagramScope">basic</x:String>
             <x:String x:Key="InstagramProfileInfoURL">https://api.instagram.com/v1/users/self/?access_token</x:String>
 
-            <!-- Twitter -->
-            <x:String x:Key="TwitterConsumerKey">19828809-h0tR8iX3jtO5Ag6IwThSSJZ0a6RwTuqnAUvDMOl5A</x:String>
-            <x:String x:Key="TwitterConsumerSecret">bMFLmRZfeUH1upQ2rJyeWTXaR3T0lx4yluxsP3JwcEGoV</x:String>
+            <!-- Twitter
+            <x:String x:Key="TwitterConsumerKey">DScFmsoErlouBkm7dMuPN5uFi</x:String>
+            <x:String x:Key="TwitterConsumerSecret">j6brhz57PiwTPAuW6JzSEHqEQ3P0jqs3pkZ5esupYojhEiIw3H</x:String>
             <x:String x:Key="TwitterRequestTokenURL">https://api.twitter.com/oauth/request_token</x:String>
             <x:String x:Key="TwitterAuthorizeURL">https://api.twitter.com/oauth/authorize</x:String>
             <x:String x:Key="TwitterAccessTokenURL">https://api.twitter.com/oauth/access_token</x:String>
-            <x:String x:Key="Url">http://www.zulu-software.com</x:String>
+            <x:String x:Key="Url">http://zulu-software.com</x:String>
+            <x:String x:Key="TwitterProfileInfoURL">https://api.twitter.com/1.1/account/verify_credentials.json</x:String>
+            -->
+            <!-- Twitter -->
+            <!--
+            <x:String x:Key="TwitterKey">DScFmsoErlouBkm7dMuPN5uFi</x:String>
+            <x:String x:Key="TwitterSecret">j6brhz57PiwTPAuW6JzSEHqEQ3P0jqs3pkZ5esupYojhEiIw3H</x:String>
+            -->
+            <x:String x:Key="TwitterKey">mXWE3DdTWHvC4W7a2V1abSdyN</x:String>
+            <x:String x:Key="TwitterSecret">4DqyRP8hE4wCvgGtbamGR35JnUuW5bQ2lL3k8M9fsDRxcF8q3X</x:String>
+            <x:String x:Key="TwitterRequestURL">https://api.twitter.com/oauth/request_token</x:String>
+            <x:String x:Key="TwitterAuthURL">https://twitter.com/oauth/authenticate</x:String>
+            <x:String x:Key="TwitterURLAccess">https://api.twitter.com/oauth/access_token</x:String>
+            <x:String x:Key="TwitterCallbackURL">https://twitter.com/</x:String>
             <x:String x:Key="TwitterProfileInfoURL">https://api.twitter.com/1.1/account/verify_credentials.json</x:String>
 
 

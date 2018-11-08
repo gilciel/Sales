@@ -27,13 +27,27 @@ namespace Sales.Droid.Implementations
             var TwitterCallbackURL = Xamarin.Forms.Application.Current.Resources["TwitterCallbackURL"].ToString();
             var TwitterURLAccess = Xamarin.Forms.Application.Current.Resources["TwitterURLAccess"].ToString();
 
+            /*
+                        var auth = new OAuth1Authenticator(
+                            consumerKey: TwitterKey,
+                            consumerSecret: TwitterSecret,
+                            requestTokenUrl: new Uri(TwitterRequestURL),
+                            authorizeUrl: new Uri(TwitterAuthURL),
+                            accessTokenUrl: new Uri(TwitterURLAccess),
+                            callbackUrl: new Uri(TwitterCallbackURL));
+            */
             var auth = new OAuth1Authenticator(
-                consumerKey: TwitterKey,
-                consumerSecret: TwitterSecret,
-                requestTokenUrl: new Uri(TwitterRequestURL),
-                authorizeUrl: new Uri(TwitterAuthURL),
-                callbackUrl: new Uri(TwitterCallbackURL),
-                accessTokenUrl: new Uri(TwitterURLAccess));
+              consumerKey: TwitterKey,
+              consumerSecret: TwitterSecret,
+              requestTokenUrl: new Uri("https://api.twitter.com/oauth/request_token"),
+              authorizeUrl: new Uri("https://api.twitter.com/oauth/authorize"),
+              accessTokenUrl: new Uri("https://api.twitter.com/oauth/access_token"),
+              callbackUrl: new Uri("http://apps.twitter.com"));
+
+            auth.AllowCancel = true;
+            activity.StartActivity(auth.GetUI(activity));
+
+
 
             auth.Completed += async (sender, eventArgs) =>
             {
@@ -57,7 +71,6 @@ namespace Sales.Droid.Implementations
                 "GET",
                 new Uri(TwitterProfileInfoURL), null,
                 account);
-
             var response = await requestUrl.GetResponseAsync();
             var responseTwitter = JsonConvert.DeserializeObject<TwitterResponse>(response.GetResponseText());
             var url = Xamarin.Forms.Application.Current.Resources["UrlAPI"].ToString();

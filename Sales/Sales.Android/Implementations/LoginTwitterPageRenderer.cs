@@ -42,13 +42,9 @@ namespace Sales.Droid.Implementations
               requestTokenUrl: new Uri("https://api.twitter.com/oauth/request_token"),
               authorizeUrl: new Uri("https://api.twitter.com/oauth/authorize"),
               accessTokenUrl: new Uri("https://api.twitter.com/oauth/access_token"),
-              callbackUrl: new Uri("http://apps.twitter.com"));
+              callbackUrl: new Uri("http://mobile.twitter.com"));
 
             auth.AllowCancel = true;
-            activity.StartActivity(auth.GetUI(activity));
-
-
-
             auth.Completed += async (sender, eventArgs) =>
             {
                 if (eventArgs.IsAuthenticated)
